@@ -1,3 +1,4 @@
+# Two-stage build
 FROM python:3.6-alpine as python-base
 
 # Stage 1
