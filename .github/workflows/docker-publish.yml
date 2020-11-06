@@ -8,6 +8,9 @@ on:
     # Publish `v1.2.3` tags as releases.
     tags:
       - v*
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
 env:
   # IMAGE_NAME: search_engine_ui
   IMAGE_NAME: ${{ github.event.repository.name }}
