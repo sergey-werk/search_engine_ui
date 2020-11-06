@@ -2,7 +2,12 @@
 
 name: Linting and unittests
 
-on: [push, pull_request]
+on: 
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+  pull_request:
 
 jobs:
   job:
