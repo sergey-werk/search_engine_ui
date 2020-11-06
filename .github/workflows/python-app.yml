@@ -30,7 +30,7 @@ jobs:
         python -m unittest discover -s tests/
     - name: Check tests coverage
       id: coverage
-      if: "contains(github.event.head_commit.message, 'coverage')"
+      if: "contains(github.event.head_commit.message, '+coverage')"
       run: |
         coverage run -m unittest discover -s tests/
         coverage report --include ui/ui.py
