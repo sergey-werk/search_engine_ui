@@ -12,6 +12,7 @@ on:
 env:
   # IMAGE_NAME: search_engine_ui
   IMAGE_NAME: ${{ github.event.repository.name }}
+  DOCKER_USER: ${{ secrets.DOCKER_USER }}
 
 jobs:
   test:
@@ -39,7 +40,6 @@ jobs:
         run: |
           docker build . --file Dockerfile
 
-  # Push image to GitHub Packages.
   push:
     # Ensure test job passes before pushing image.
     needs: test
@@ -53,11 +53,11 @@ jobs:
         run: docker build . --file Dockerfile
       
       - name: Log into Docker Container Registry
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u $DOCKER_USER --password-stdin
       
       - name: Push image to Docker Container Registry
         run: |
-          IMAGE_ID=${{ secrets.DOCKER_USER }}/$IMAGE_NAME
+          IMAGE_ID=$DOCKER_USER/$IMAGE_NAME
 
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
