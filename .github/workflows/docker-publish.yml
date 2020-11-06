@@ -11,7 +11,7 @@ on:
 env:
   # IMAGE_NAME: search_engine_ui
   IMAGE_NAME: ${{ github.event.repository.name }}
-  DOCKER_USER: sergeywerk
+  DOCKER_USER: ${{ secrets.DOCKER_USER }}
 
 jobs:
   test:
