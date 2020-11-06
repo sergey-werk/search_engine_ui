@@ -1,5 +1,5 @@
 # Search Engine UI
-![docker pull sergeywerk/search_engine_ui:latest](https://github.com/actions/hello-world/workflows/.github/workflows/docker-publish.yml/badge.svg)
+![docker pull sergeywerk/search_engine_ui:latest](https://github.com/actions/search_engine_ui/workflows/.github/workflows/docker-publish.yml/badge.svg)
 
 Веб-интерфейс поиска слов и фраз на проиндексированных [ботом](https://github.com/express42/search_engine_crawler) сайтах.
 
