@@ -29,13 +29,15 @@ jobs:
         if [ -f requirements-test.txt ]; then pip install -r requirements-test.txt; fi
         python -m unittest discover -s tests/
     - name: Check tests coverage
+      id: coverage
+      if: "contains(github.event.head_commit.message, 'coverage')"
       run: |
         coverage run -m unittest discover -s tests/
         coverage report --include ui/ui.py
         coverage html
-        ls -l htmlcov/
-    - name: Upload test coverage report
+    - name: Upload coverage report
+      if: steps.coverage.outcome == 'success'
       uses: actions/upload-artifact@v2
       with:
-        name: htmlcov-results-${{ matrix.python-version }}
+        name: htmlcov-results
         path: htmlcov/**
