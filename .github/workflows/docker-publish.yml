@@ -5,13 +5,13 @@ on:
     # Publish `master` as Docker `latest` image.
     branches:
       - master
-      - dev-github-actions
     # Publish `v1.2.3` tags as releases.
     tags:
       - v*
 env:
   # IMAGE_NAME: search_engine_ui
   IMAGE_NAME: ${{ github.event.repository.name }}
+  DOCKER_USER: ${{ secrets.DOCKER_USER }}
 
 jobs:
   test:
@@ -31,15 +31,6 @@ jobs:
       run: |
         python -m unittest discover -s tests/
 
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build
-        run: |
-          docker build . --file Dockerfile
-
-  # Push image to GitHub Packages.
   push:
     # Ensure test job passes before pushing image.
     needs: test
@@ -50,14 +41,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build image
-        run: docker build . --file Dockerfile --tag $
+        run: docker build . --file Dockerfile -t $IMAGE_NAME
       
       - name: Log into Docker Container Registry
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login https://ghcr.io -u ${{ secrets.DOCKER_USER }} --password-stdin
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u $DOCKER_USER --password-stdin
       
       - name: Push image to Docker Container Registry
         run: |
-          IMAGE_ID=${{ secrets.DOCKER_USER }}/$IMAGE_NAME
+          IMAGE_ID=$DOCKER_USER/$IMAGE_NAME
 
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
@@ -71,8 +62,7 @@ jobs:
           # Use Docker `latest` tag convention
           [ "$VERSION" == "master" ] && VERSION=latest
 
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
+          echo IMAGE_ID=$IMAGE_ID; IMAGE_NAME=$IMAGE_NAME; VERSION=$VERSION
 
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
