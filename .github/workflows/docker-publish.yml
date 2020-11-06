@@ -50,7 +50,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build image
-        run: docker build . --file Dockerfile --tag $
+        run: docker build . --file Dockerfile
       
       - name: Log into Docker Container Registry
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login https://ghcr.io -u ${{ secrets.DOCKER_USER }} --password-stdin
